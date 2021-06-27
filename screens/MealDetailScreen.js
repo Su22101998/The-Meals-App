@@ -1,12 +1,34 @@
-import React from 'react';
+import React,{useEffect,useCallback} from 'react';
 import { Text, View, StyleSheet, Image, ScrollView } from 'react-native';
-import { MEALS } from '../data/dummy-data';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Colours from '../constants/Colours';
+import { useSelector , useDispatch } from 'react-redux';
+import { toggleFavourite } from '../store/actions/meals';
 
-const MealDetailScreen = ({ props, route, navigation }) => {
+const MealDetailScreen = ({ props, route, navigation:{setParams} }) => {
+
     const { mealId } = route.params;
-    const selectedMenu = MEALS.find(meals => meals.id == mealId)
+    const availableMeals = useSelector(state => state.meals.meals)
+    const isFavouriteMeal = useSelector(state =>state.meals.favouriteMeals.some(meal => meal.id === mealId))
+
+    const dispatch = useDispatch()
+
+    const toggleFavouriteHandler = useCallback(() => {
+        dispatch(toggleFavourite(mealId))
+    },[dispatch,mealId])
+
+    useEffect (() =>{
+        setParams({toggleFav:toggleFavouriteHandler})
+    },[toggleFavouriteHandler])
+
+
+    useEffect (() =>{
+        setParams({isFav:isFavouriteMeal})
+    },[isFavouriteMeal])
+
+
+    
+    const selectedMenu = availableMeals.find(meals => meals.id == mealId)
     const myIcon = <Icon name="star" size={20} color={Colours.background} />
     const myIcon2 = <Icon name="radio-button-on-outline" size={10} color={Colours.tertiary} />
 
@@ -59,7 +81,7 @@ const styles = StyleSheet.create({
     image: {
         width: '95%',
         height: 300,
-        borderRadius: 20
+        borderRadius: 20,
     },
     titleContainer: {
         paddingVertical: 20,

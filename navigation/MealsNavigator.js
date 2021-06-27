@@ -11,12 +11,20 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import FavouritesScreen from '../screens/FavouritesScreen';
 import Icon from 'react-native-vector-icons/Ionicons';
-import FiltersScreen from '../screens/FiltersScreen'
+import FiltersScreen from '../screens/FiltersScreen';
+import { LogBox } from 'react-native';
 
+LogBox.ignoreLogs([
+    'Non-serializable values were found in the navigation state',
+  ]);
+
+//creating the three types of navigators
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
+
+//style for the header 
 const NavigationHeaderStyles = {
     headerStyle: { backgroundColor: Colours.tertiary },
     headerTitleStyle: {
@@ -27,6 +35,7 @@ const NavigationHeaderStyles = {
 }
 
 
+//style for the bottom tab navigator
 const TabBarStyles = {
     activeTintColor: Colours.tertiary,
     activeBackgroundColor: Colours.accent,
@@ -38,6 +47,7 @@ const TabBarStyles = {
 }
 
 
+// header left menu icon component
 const HeaderLeftIcon = (props) => {
     return (<HeaderButtons HeaderButtonComponent={HeaderButton} >
         <Item
@@ -50,6 +60,8 @@ const HeaderLeftIcon = (props) => {
     </HeaderButtons>)
 }
 
+
+// header right favouritr icon component
 const HeaderRightFavIcon = () => {
     return (
         <HeaderButtons
@@ -64,6 +76,8 @@ const HeaderRightFavIcon = () => {
 }
 
 
+
+// stack navigator for the main stack of categories screen, categorymeals screen and meal detai screen
 const MealsStackNavigator = (navData) => {
     return (
 
@@ -97,7 +111,14 @@ const MealsStackNavigator = (navData) => {
                         title: route.params.mealName,
 
                         headerRight: () => (
-                            <HeaderRightFavIcon />)
+                            <HeaderButtons
+                            HeaderButtonComponent={HeaderButton} >
+                                <Item
+                                title='Favourite'
+                                iconName={route.params.isFav?'star':'star-outline'}
+                                onPress={() => route.params.toggleFav() }
+                                />
+                            </HeaderButtons>)
                     })
                 }
             />
@@ -108,6 +129,8 @@ const MealsStackNavigator = (navData) => {
 }
 
 
+
+// stack navigator for the favourites and detail screen
 const FavStackNavigator = (navData) => {
     return (
         <Stack.Navigator
@@ -130,7 +153,14 @@ const FavStackNavigator = (navData) => {
                         title: route.params.mealName,
 
                         headerRight: () => (
-                            <HeaderRightFavIcon />)
+                            <HeaderButtons
+                            HeaderButtonComponent={HeaderButton} >
+                                <Item
+                                title='Favourite'
+                                iconName={route.params.isFav?'star':'star-outline'}
+                                onPress={() => route.params.toggleFav() }
+                                />
+                            </HeaderButtons>)
                     })
                 }
 
@@ -140,6 +170,8 @@ const FavStackNavigator = (navData) => {
 }
 
 
+
+// stack navigator for the filter screen
 const FilterStackNavigator = (navData) => {
     return (
         <Stack.Navigator
@@ -159,7 +191,7 @@ const FilterStackNavigator = (navData) => {
                                 <Item
                                     title='Save'
                                     iconName='save'
-                                    onPress ={ () => route.params.save()}
+                                    onPress ={()=> route.params.save()}
                                 />
                             </HeaderButtons>)
 
@@ -172,6 +204,8 @@ const FilterStackNavigator = (navData) => {
 }
 
 
+
+// tab navigator for the main stack and favourites stack
 const TabNav = () => {
     return (
         <Tab.Navigator
@@ -204,6 +238,8 @@ const TabNav = () => {
 }
 
 
+
+// Drawer navigation for entire app
 const MainDrawerNav = () => {
     return (
         <NavigationContainer>
@@ -232,5 +268,6 @@ const MainDrawerNav = () => {
         </NavigationContainer>
     )
 }
+
 
 export default MainDrawerNav;

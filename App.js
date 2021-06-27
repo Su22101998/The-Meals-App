@@ -1,28 +1,25 @@
-
 import React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
 import MealsNavigator from './navigation/MealsNavigator';
 import { enableScreens } from 'react-native-screens';
+import {createStore,combineReducers} from 'redux';
+import mealsReducer from './store/reducers/meals';
+import { Provider } from 'react-redux';
 
+
+const rootReducer = combineReducers({
+  meals: mealsReducer
+})
+const store = createStore(rootReducer)
 enableScreens();
+
 const App = () => {
 
   return (
-    <MealsNavigator />
+    <Provider store={store}>
+      <MealsNavigator />
+    </Provider>
   );
 };
 
-const styles = StyleSheet.create({
- screen:{
-   flex:1,
- }
-});
 
 export default App;

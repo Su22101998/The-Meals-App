@@ -2,9 +2,13 @@ import React from 'react';
 import {View, StyleSheet ,FlatList} from 'react-native';
 import MealItem from '../components/MealItem';
 import Colours from '../constants/Colours';
+import { useSelector } from 'react-redux';
 
 const MealList = (props)=> {
+
+    const favouriteMeal = useSelector(state => state.meals.favouriteMeals)
     const renderMenu = (itemData)=> {
+        const favMeal = favouriteMeal.some(meal => meal.id == itemData.item.id)
         return(
             <MealItem 
             title={itemData.item.title}
@@ -15,7 +19,8 @@ const MealList = (props)=> {
             rating ={itemData.item.rating}
             onPress={()=>{props.navigation.navigate("MealDetail",
                                 {mealId:itemData.item.id,
-                                mealName:itemData.item.title})}
+                                mealName:itemData.item.title,
+                                isFav: favMeal})}
                     }
              />
             )

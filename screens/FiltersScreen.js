@@ -1,6 +1,8 @@
 import React, { useState, useEffect,useCallback } from 'react';
 import { Text, View, StyleSheet, Switch } from 'react-native';
 import Colours from '../constants/Colours';
+import { useDispatch } from 'react-redux';
+import { setFilters } from '../store/actions/meals';
 
 
 const FiltersScreen = ({navigation:{setParams}}) => {
@@ -13,6 +15,8 @@ const FiltersScreen = ({navigation:{setParams}}) => {
 
     const [isLactoseFree, setIsLactoseFree] = useState(false)
 
+    const dispatch = useDispatch()
+
     const saveFilters = useCallback(() => {
         const appliedFilters = {
             glutenFree: isGlutenFree,
@@ -20,10 +24,10 @@ const FiltersScreen = ({navigation:{setParams}}) => {
             vegan: isVegan,
             vegetarian: isVegetarian
         }
-        console.log(appliedFilters)
+        dispatch(setFilters(appliedFilters))
     },[isGlutenFree,isLactoseFree,isVegan,isVegetarian])
 
-    useEffect(() => {
+useEffect(() => {
         setParams({ save: saveFilters })
     },[saveFilters])
 
